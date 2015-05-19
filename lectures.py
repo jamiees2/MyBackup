@@ -1,4 +1,4 @@
-from utils import stripQuery, save, saveRedirect, saveLink
+from utils import stripQuery, save, saveRedirect, saveLink, cleanFile
 from session import session as s
 from pyquery import PyQuery as pq
 import os
@@ -48,7 +48,7 @@ def downloadLectures(url):
                 if "?Page=Download" in url:
                     save(path, url)
                 elif "Action=16" in url:
-                    saveRedirect(os.path.join(path, title + ".html"), url)
+                    saveRedirect(os.path.join(path, cleanFile(title) + ".html"), url)
                 else:
-                    saveLink(os.path.join(path, title + ".html"), url)
+                    saveLink(os.path.join(path, cleanFile(title) + ".html"), url)
 

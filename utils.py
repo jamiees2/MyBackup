@@ -3,6 +3,13 @@ from urllib.parse import urlparse
 import json
 import os
 from cgi import parse_header
+import unicodedata
+
+validFilenameChars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+
+def cleanFile(filename):
+    cleanedFilename = unicodedata.normalize('NFKD', filename).encode('ASCII', 'ignore')
+    return ''.join(c for c in cleanedFilename if c in validFilenameChars)
 
 def stripQuery(url):
     return url.replace("?" + urlparse(url).query, "")
@@ -11,7 +18,7 @@ def save(path, url):
     data = s.get(url)
     if os.path.isdir(path):
         _, params = parse_header(data.headers["Content-Disposition"])
-        with open(os.path.join(path, params["filename"]), "wb") as f:
+        with open(os.path.join(path, cleanFile(params["filename"])), "wb") as f:
             f.write(data.content)
     else:
         with open(path, 'wb') as f:
