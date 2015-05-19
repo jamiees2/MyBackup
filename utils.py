@@ -3,13 +3,10 @@ from urllib.parse import urlparse
 import json
 import os
 from cgi import parse_header
-import unicodedata
+import re
 
-validFilenameChars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-
-def cleanFile(filename):
-    cleanedFilename = unicodedata.normalize('NFKD', filename).encode('ASCII', 'ignore')
-    return ''.join(c for c in cleanedFilename if c in validFilenameChars)
+def cleanFile(value):
+    return re.sub('[\\/:"*?<>|]+', '', value)
 
 def stripQuery(url):
     return url.replace("?" + urlparse(url).query, "")

@@ -4,7 +4,7 @@ import os
 
 from session import session as s
 
-from utils import save, stripQuery, jsondump
+from utils import save, stripQuery, jsondump, cleanFile
 
 def getAssignment(url):
     data = s.get(url)
@@ -111,10 +111,10 @@ def downloadAssignments(url, handin=False):
     assignments = getAssignments(url)
     os.mkdir("assignments")
     for k, v in assignments.items():
-        os.mkdir(os.path.join("assignments", k))
+        os.mkdir(os.path.join("assignments", cleanFile(k)))
         for item in v:
             print("Processing %s/%s" % (k, item["Nafn"][0]))
-            path = os.path.join("assignments", k, item["Nafn"][0])
+            path = os.path.join("assignments", k, cleanFile(item["Nafn"][0]))
             os.mkdir(path)
             assignment = getAssignment(item["Nafn"][1])
 

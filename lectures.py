@@ -35,7 +35,7 @@ def downloadLectures(url):
     print("Processing Lectures")
     os.mkdir("lectures")
     for k, v in lectures.items():
-        os.mkdir(os.path.join("lectures", k))
+        os.mkdir(os.path.join("lectures", cleanFile(k)))
         for item in v:
             print("Processing %s/%s" % (k, item["Heiti"]))
             path = os.path.join("lectures", k, item["Heiti"])

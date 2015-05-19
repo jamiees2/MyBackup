@@ -1,4 +1,4 @@
-from utils import stripQuery, save, saveRedirect
+from utils import stripQuery, save, saveRedirect, cleanFile
 from session import session as s
 from pyquery import PyQuery as pq
 import os
@@ -33,10 +33,10 @@ def downloadMaterials(url):
     print("Processing Materials")
     os.mkdir("materials")
     for k, v in materials.items():
-        os.mkdir(os.path.join("materials", k))
+        os.mkdir(os.path.join("materials", cleanFile(k)))
         for item in v:
             print("Processing %s/%s" % (k, item["Heiti"][0]))
-            path = os.path.join("materials", k, item["Heiti"][0])
+            path = os.path.join("materials", k, cleanFile(item["Heiti"][0]))
             os.mkdir(path)
             url = item["Heiti"][1]
 
