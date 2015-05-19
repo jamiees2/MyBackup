@@ -4,6 +4,24 @@ import json
 import os
 from cgi import parse_header
 import re
+import shutil
+
+dirs = set()
+def mkdir(base, name=None):
+    if name:
+        base = os.path.join(base, cleanFile(name))
+    path = base
+    i = 2
+    # This way, it can be ensured that directories that shouldn't be there are
+    # deleted
+    while path in dirs:
+        path = base + ("_%d" % i)
+        i += 1
+    dirs.add(path)
+    if os.path.exists(path):
+        shutil.rmtree(path)
+    os.makedirs(path)
+    return path
 
 def cleanFile(value):
     return re.sub('[\\/:"*?<>|]+', '', value)

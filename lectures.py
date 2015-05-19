@@ -1,4 +1,4 @@
-from utils import stripQuery, save, saveRedirect, saveLink, cleanFile
+from utils import stripQuery, save, saveRedirect, saveLink, cleanFile, mkdir
 from session import session as s
 from pyquery import PyQuery as pq
 import os
@@ -35,11 +35,10 @@ def downloadLectures(url):
     print("Processing Lectures")
     os.mkdir("lectures")
     for k, v in lectures.items():
-        os.mkdir(os.path.join("lectures", cleanFile(k)))
+        dirpath = mkdir("lectures", k)
         for item in v:
             print("Processing %s/%s" % (k, item["Heiti"]))
-            path = os.path.join("lectures", k, item["Heiti"])
-            os.mkdir(path)
+            path = mkdir(dirpath, item["Heiti"])
             for link, title in {"Glærur": "slides","3/síðu": "3_page","6/síðu": "6_page","Hljóðgl.": "video","Annað": "other"}.items():
                 l = item[link]
                 if not l or len(l) != 2: continue
