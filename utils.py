@@ -6,6 +6,19 @@ from cgi import parse_header
 import re
 import shutil
 
+def clearDir(folder):
+    for f in os.listdir(folder):
+        path = os.path.join(folder, f)
+        try:
+            if os.path.isfile(path):
+                os.unlink(path)
+            elif os.path.islink(path):
+                os.unlink(path)
+            elif os.path.isdir(path):
+                shutil.rmtree(path)
+        except Exception as e:
+            print(e)
+
 dirs = set()
 def mkdir(base, name=None):
     if name:

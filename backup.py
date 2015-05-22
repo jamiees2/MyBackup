@@ -1,7 +1,7 @@
 from pyquery import PyQuery as pq
 import re
 from session import session as s
-from utils import stripQuery, jsondump, genHtml
+from utils import stripQuery, jsondump, genHtml, clearDir
 from assignments import downloadAssignments
 from materials import downloadMaterials
 from lectures import downloadLectures
@@ -87,11 +87,10 @@ def main(args):
     bookhtml = getContent(urls["Bækur"])
 
     print("Creating directory structure")
-    try:
-        shutil.rmtree(info["title"])
-    except:
-        pass
-    os.mkdir(info["title"])
+    if os.path.isdir(info["title"]):
+        clearDir(info["title"])
+    else:
+        os.makedirs(info["title"])
     os.chdir(info["title"])
 
     print("Saving class description")
