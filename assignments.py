@@ -4,7 +4,7 @@ import os
 
 from session import session as s
 
-from utils import save, stripQuery, jsondump, mkdir
+from utils import save, stripQuery, jsondump, mkdir, genHtml
 
 def getAssignment(url):
     data = s.get(url)
@@ -46,7 +46,7 @@ def getAssignmentDescription(desctable, host):
     desc = {}
     items = ["due", "description", "percent", "filetype", "filenumber"]
     for id, i in zip(items,[1,2,4,5,6]):
-        desc[id] = ":".join(desctable.children("tr").eq(i).text().split(":")[1:]).strip()
+        desc[id] = desctable.children("tr").eq(i).children("td").eq(2).html().strip()
     desc["title"] = desctable.find("tr").eq(0).text()
 
     # Files
@@ -121,6 +121,7 @@ def downloadAssignments(url, handin=False):
             descr = os.path.join(path, "description")
             os.mkdir(descr)
             jsondump(os.path.join(descr,"description.json"), assignment["description"])
+            genHtml(os.path.join(descr, "description.html"), assignment["description"]["description"], assignment["description"]["title"])
             for item in assignment["description"]["files"]:
                 save(descr, item["url"])
 
