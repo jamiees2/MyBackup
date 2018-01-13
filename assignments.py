@@ -70,10 +70,16 @@ def readFileTable(table, host):
 
 def getAssignmentStatistics(table, host):
     ret = {}
-    ret["image"] = host + table.children("tr").eq(0).find("img").attr("src")
+    try:
+        ret["image"] = host + table.children("tr").eq(0).find("img").attr("src")
+    except:
+        ret["image"] = None
 
     stats = table.children("tr").eq(1).find("table tr").not_(".ruTableTitle").children("td").items()
     stats = list(stats)
+    print(stats)
+    if not stats: 
+        return ret
     ret["average"] = stats[1].text()
     ret["middle"] = stats[4].text()
     ret["standarddev"] = stats[6].text()
@@ -139,5 +145,6 @@ def downloadAssignments(url, handin=False):
                     jsondump(os.path.join(handin, "handin.json"), assignment["handin"])
 
                 if "statistics" in assignment:
-                    jsondump(os.path.join(path,"stats.json"), assignment["statistics"])
-                    save(os.path.join(path, "stats.jpg"), assignment["statistics"]["image"])
+                    jsondump(os.path.join(path, "stats.json"), assignment["statistics"])
+                    if assignment["statistics"]["image"] is not None:
+                        save(os.path.join(path, "stats.jpg"), assignment["statistics"]["image"])

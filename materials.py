@@ -8,7 +8,7 @@ def getMaterials(url):
     data = s.get(url)
     doc = pq(data.content)
     tableQ = ".ruContentPage > center > form > .ruTable"
-    titles = [el.text() for el in doc(tableQ + " > .ruTableTitle").items() if el.text() != ""]
+    titles = [el.text() for el in doc(tableQ + " > .ruTableTitle").items()]
     tables = doc(tableQ + " .ruTable").items()
     items = []
     for table in tables:
